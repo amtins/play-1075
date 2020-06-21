@@ -1,0 +1,10 @@
+node_modules
+coverage
+storybook-static
+.cache
+
+.DS_Store
+.vscode
+.cache
+.idea
+/generated/

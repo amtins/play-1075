@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLAY 1075</title>
+
+    <style type="text/css">
+        body {
+            background: #222;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            color: #eee;
+            font-family: Courier New;
+        }
+
+        button {
+            border: none;
+            color: black;
+            padding: 5px;
+            margin: 0;
+            background: #aaa;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .player {
+            width: 640px;
+            height: 360px;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            width: 640px;
+            flex-direction: row;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            align-content: space-around;
+            height: 100px;
+        }
+
+        button:hover,
+        .selected {
+            background-color: #fff;
+        }
+    </style>
+    <link rel="stylesheet" href="dist/letterbox.css">
+</head>
+
+<body>
+    <h1>PLAY 1075, Chrome OS DRM playback</h1>
+
+    <div class="player"></div>
+    <div class="buttons">
+        <button value="srf1" class="selected">SRF1 Live DRM</button>
+        <button value="tagesschau">SRF VOD</button>
+        <button value="srf1Radio">SRF1 Live Radio</button>
+        <button value="srf1Audio">SRF1 AOD</button>
+        <button value="rts1">RTS1 Live DVR DRM</button>
+        <button value="rtsInfo">RTS Info Live DVR</button>
+        <button value="swi">Swissinfo mp4 VOD</button>
+    </div>
+    <script src="dist/letterbox.js"></script>
+    <script type="module">
+        const optionsParam = {
+            fillMode: true,
+            playerFocus: true,
+            hdMode: undefined,
+            language: 'de',
+        };
+
+        //Player initialization
+        window.letterbox = new SRGLetterbox(optionsParam);
+        letterbox.initializeOnElement('player');
+
+        const urns = {
+            srf1: 'urn:srf:video:c4927fcf-e1a0-0001-7edd-1ef01d441651',
+            tagesschau: 'urn:srf:video:2275c656-e65d-4afe-b543-4942665eecca',
+            srf1Radio: 'urn:srf:audio:69e8ac16-4327-4af4-b873-fd5cd6e895a7',
+            srf1Audio: 'urn:srf:audio:4e740db4-065c-4223-abb7-26e690d5b586',
+            rts1: 'urn:rts:video:3608506',
+            rtsInfo: 'urn:rts:video:1967124',
+            swi: 'urn:swi:video:45773496',
+        }
+        letterbox.prepareToPlayURN(urns.srf1, undefined, undefined, true);
+
+        const buttons = document.querySelector('.buttons');
+
+        buttons.addEventListener('click', (e) => {
+            e.stopPropagation();
+            [...buttons.children].forEach(button => button.classList.remove('selected'));
+
+            if (!e.target.classList.contains('buttons')) {
+                console.log(e.target.value);
+                e.target.classList.add('selected');
+
+                letterbox.prepareToPlayURN(urns[e.target.value], undefined, undefined, true);
+            }
+        });
+    </script>
+</body>
+
+</html>
